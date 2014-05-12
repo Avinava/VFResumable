@@ -1,0 +1,65 @@
+<apex:component selfClosing="true">
+    
+    <!--attributes -->
+    <apex:attribute name="formids"  
+        description="A comma seperated list of Ids of target form"
+        type="String" required="true" />
+    <apex:attribute name="importjquery"
+        description="Assign false if you dont want to jquery files"
+        type="Boolean" default="true" />
+    <apex:attribute name="enable"
+        description="Set true if you want to enable the VFresumable as soon as page loads, set false to disable this, when false you may have to use js handler to enable VFResumable"
+        type="Boolean" default="true" />
+    
+    <!--script files -->   
+    <apex:outputPanel rendered="{!importjquery}">
+        <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" />
+    </apex:outputPanel>    
+    <apex:includeScript value="{!URLFOR($Resource.VFResumable, 'garlic.min.js')}"/>
+    
+    
+    <script>
+        var vfResumable;
+        
+        function VFResumable(){
+            var vfr = this;
+            var $;
+            jQuery(function($){
+                vfr.$ = $                 
+            });
+        }
+        
+        VFResumable.prototype = {
+            init : function(){                      
+                       $(('{!formids}'.split(','))).each(function(){
+                            $("[id$='"+this.trim()+"']").garlic();
+                       });                       
+                       
+                   },
+            destroy : function(){
+                        $(('{!formids}'.split(','))).each(function(){
+                            $("[id$='"+this.trim()+"']").find('input,select,textarea').garlic('destroy');
+                       });
+                    }
+        
+        }
+        
+      function initVFResumable(){
+          vfResumable = new VFResumable();
+          vfResumable.init();
+      }
+      
+      function clearVFResumable(){
+          if(vfResumable){
+              vfResumable.destroy();
+          }
+      }
+      
+      if({!enable}){
+          jQuery(function($){
+              initVFResumable();
+          });
+      }
+        
+    </script>
+</apex:component>

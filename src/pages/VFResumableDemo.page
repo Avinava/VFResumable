@@ -1,0 +1,25 @@
+<apex:page standardController="Lead">
+    <apex:sectionHeader title="VFResumable" subtitle="Restore previous values using VFResumable"/>
+    <ul>
+        <li>Type something in the fields</li>
+        <li>Press F5 or Reload the page using the reload button</li>
+        <li>The page will retain the last typed in values, untill you press the Clear button or submit the form</li>
+        <li>The component uses browser based localstorage to remember the last keyed in values</li>
+    </ul>
+    <apex:form id="myForm" >       
+        <apex:pageBlock >
+            <apex:pageBlockButtons >
+                <!-- Button to clear the resumable -->
+                <apex:commandButton value="Clear" onclick="clearVFResumable();return false;"/>
+                <apex:commandButton value="Reload Page" onclick="window.location.reload(); return false;"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection >
+                <apex:inputField value="{!Lead.FirstName}"/>
+                <apex:inputField value="{!Lead.LastName}"/>
+                <apex:inputField value="{!Lead.MobilePhone}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    <!-- actual vf component -->
+    <c:VFResumable formids="myForm"/>
+</apex:page>
